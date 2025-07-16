@@ -1,6 +1,7 @@
 ﻿{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "downloads_watcher_service": {
+    "DownloadsWatcher.Service": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "environmentVariables": {
