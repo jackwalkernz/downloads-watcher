@@ -23,8 +23,37 @@
         public Folder(string name, List<string> extensions, string? path = null)
         {
             Name = name;
-            Extensions = extensions ?? new List<string>();
+            Extensions = ValidateExtensions(extensions) ? extensions : throw new ArgumentException("Extensions must be a non-empty list of valid file extensions.", nameof(extensions));
             Path = DerivePath(path);
+        }
+
+        /// <summary>
+        /// Validates a list of file extensions to ensure they are in the correct format.
+        /// </summary>
+        /// <param name="extensions">A list of file extensions to validate. Each extension must start with a dot and contain alphanumeric
+        /// characters only.</param>
+        /// <returns><see langword="true"/> if all extensions are valid; otherwise, <see langword="false"/> if the list is null
+        /// or empty.</returns>
+        /// <exception cref="ArgumentException">Thrown if any extension in the list is null, empty, or does not match the required format.</exception>
+        private bool ValidateExtensions(List<string> extensions)
+        {
+            string regexPattern = @"^\.[a-zA-Z0-9]+$";
+            if(extensions == null || extensions.Count == 0)
+            {
+                return false;
+            }
+            if(extensions.Any(ext => string.IsNullOrWhiteSpace(ext)))
+            {
+                return false;
+            }
+            foreach (string ext in extensions)
+            {
+                if (!System.Text.RegularExpressions.Regex.IsMatch(ext, regexPattern))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>
